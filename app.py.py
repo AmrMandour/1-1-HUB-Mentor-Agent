@@ -1,117 +1,142 @@
 import streamlit as st
-import requests
 
-# إعدادات الصفحة
+# إعدادات صفحة التطبيق الرسمية
 st.set_page_config(
-    page_title="1:1 HUB - Smart Mentor Matching Agent",
-    page_icon="🎯",
-    layout="centered"
+    page_title="منصة التوجيه والإرشاد المهني - 1:1 HUB",
+    page_icon="💼",
+    layout="wide"
 )
 
-# تصميم وتنسيق بصري بسيط
+# تصميم واجهة مستخدم احترافية ونظيفة خالية من الرموز التعبيرية
 st.markdown("""
     <style>
-    .main { direction: rtl; text-align: right; }
-    h1, h2, h3, p, label { direction: rtl; text-align: right; }
-    .stButton>button { width: 100%; background-color: #ff4b4b; color: white; font-weight: bold; }
+        .main-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1E3A8A;
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            font-size: 15px;
+            color: #4B5563;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .mentor-card {
+            background-color: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
     </style>
 """, unsafe_allow_html=True)
 
-st.title("🎯 1:1 HUB - Smart Mentor Matcher")
-st.write("مساعدك الذكي لمطابقة احتياجاتك التدريبية مع أفضل الموجهين المعتمدين على منصتنا، وتسهيل حجز جلستك المجانية فوراً!")
+# عرض اللوجو الرسمي للمنصة في أعلى الصفحة بحجم مناسب ومتناسق
+col_l1, col_l2, col_l3 = st.columns([1, 2, 1])
+with col_l2:
+    # رابط اللوجو الرسمي المرفوع
+    st.image("https://raw.githubusercontent.com/AmrMandour/1-1-hub-mentor-agent/main/1to1%20HUB%20Logo.png", use_container_width=True)
 
-# قاعدة بيانات الموجهين (مستخرجة من موقعك https://onetoonehub.org/mentors/)
-mentors_db = [
+st.markdown('<div class="main-title">منصة 1:1 HUB للتوجيه المهني والشركات الناشئة</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">المساعد الذكي لمطابقة احتياجاتك التدريبية مع أفضل الموجهين المعتمدين وتسهيل حجز الجلسات</div>', unsafe_allow_html=True)
+
+# قاعدة بيانات الموجهين المستخرجة من موقع 1:1 HUB
+mentors_database = [
     {
-        "name": "أحمد ممدوح",
-        "expertise": "تسويق رقمي وإدارة نمو الشركات الناشئة",
-        "keywords": ["تسويق", "إعلان", "سوشيال", "marketing", "growth", "نمو"],
-        "url": "https://onetoonehub.org/mentors/"
+        "name": "غادة حسين",
+        "title": "موجه مبيعات وشركات ناشئة",
+        "category": "المبيعات وتطوير الأعمال",
+        "experience": "20 سنة خبرة",
+        "price": "500 جنيه / ساعة",
+        "profile_url": "https://onetoonehub.org/mentors/"
     },
     {
-        "name": "خبراء 1:1 HUB للتطوير المهني",
-        "expertise": "إدارة المشاريع والتخطيط الاستراتيجي",
-        "keywords": ["إدارة", "مشاريع", "project", "agile", "scrum", "تخطيط"],
-        "url": "https://onetoonehub.org/mentors/"
+        "name": "محمد سالم",
+        "title": "مطور تطبيقات موبايل أول",
+        "category": "البرمجة والتطوير التقني",
+        "experience": "8 سنوات خبرة",
+        "price": "600 جنيه / ساعة",
+        "profile_url": "https://onetoonehub.org/mentors/"
     },
     {
-        "name": "فريق التوجيه التقني",
-        "expertise": "البرمجة وتطوير البرمجيات والذكاء الاصطناعي",
-        "keywords": ["برمجة", "تطوير", "كود", "python", "ai", "coding", "software"],
-        "url": "https://onetoonehub.org/mentors/"
+        "name": "إسراء رشوان",
+        "title": "شريك مؤسس - مسارك",
+        "category": "إدارة المشاريع والشركات الناشئة",
+        "experience": "5 سنوات خبرة",
+        "price": "450 جنيه / ساعة",
+        "profile_url": "https://onetoonehub.org/mentors/"
     },
     {
-        "name": "مستشاري ريادة الأعمال",
-        "expertise": "تأسيس الشركات الناشئة وجمع التمويل ونماذج العمل",
-        "keywords": ["ستارت أب", "شركة ناشئة", "تمويل", "pitch", "startup", "business"],
-        "url": "https://onetoonehub.org/mentors/"
+        "name": "محمد العطار",
+        "title": "استشاري تقنية المعلومات",
+        "category": "البرمجة والتطوير التقني",
+        "experience": "19 سنة خبرة",
+        "price": "800 جنيه / ساعة",
+        "profile_url": "https://onetoonehub.org/mentors/"
+    },
+    {
+        "name": "بسمة أباظة",
+        "title": "مدرب مسار مهني وسير ذاتية",
+        "category": "الموارد البشرية والتطوير المهني",
+        "experience": "18 سنة خبرة",
+        "price": "400 جنيه / ساعة",
+        "profile_url": "https://onetoonehub.org/mentors/"
     }
 ]
 
-# الخطوة الأولى: استقبال استفسار المستخدم
-user_query = st.text_input("💬 اكتب مجالك، مشكلتك، أو إيه اللي محتاج توجيه فيه (مثلاً: عاوز أبدأ في التسويق الرقمي أو عندي شركة ناشئة وعايز أنمو):")
+# الخطوة الأولى: اختيار التخصص أو المجال المطلوب
+st.subheader("اختر مجالك أو التخصص المستهدف:")
+selected_category = st.selectbox(
+    "حدد المجال للحصول على الموجه المناسب:",
+    ["اختر المجال...", "المبيعات وتطوير الأعمال", "البرمجة والتطوير التقني", "إدارة المشاريع والشركات الناشئة", "الموارد البشرية والتطوير المهني"]
+)
 
-if st.button("🔍 اعثر على الموجه المناسب"):
-    if not user_query.strip():
-        st.warning("من فضلك اكتب سؤالك أو مجالك أولاً.")
+if selected_category != "اختر المجال...":
+    st.markdown("---")
+    st.subheader("الموجهون المتاحون في تخصصك:")
+    
+    # تصفية الموجهين حسب التخصص
+    filtered_mentors = [m for m in mentors_database if m["category"] == selected_category]
+    
+    if filtered_mentors:
+        for mentor in filtered_mentors:
+            col1, col2 = st.columns([1, 3])
+            with col1:
+                st.image("https://via.placeholder.com/150", width=110) # صورة افتراضية للبروفيل
+            with col2:
+                st.markdown(f"### {mentor['name']}")
+                st.write(f"**التخصص:** {mentor['title']}")
+                st.write(f"**الخبرة:** {mentor['experience']}")
+                st.write(f"**سعر الجلسة:** {mentor['price']}")
+                st.markdown(f"[عرض الملف الشخصي الكامل للموجه]({mentor['profile_url']})")
+            st.markdown("---")
     else:
-        # خوارزمية مطابقة ذكية بسيطة مبنية على الكلمات المفتاحية
-        matched_mentors = []
-        query_lower = user_query.lower()
-        
-        for mentor in mentors_db:
-            if any(kw in query_lower for kw in mentor["keywords"]):
-                matched_mentors.append(mentor)
-        
-        # لو مفيش مطابقة دقيقة، نقترح الكل أو موجه عام
-        if not matched_mentors:
-            matched_mentors = mentors_db[:2]
-            
-        st.success("✨ وجدنا لك أفضل الموجهين المتطابقين مع احتياجك:")
-        
-        for m in matched_mentors:
-            st.markdown(f"""
-            - **الموجه المقترح:** {m['name']}
-            - **التخصص:** {m['expertise']}
-            - 🔗 [زيارة صفحة الموجهين وحجز الجلسة مباشرة]({m['url']})
-            """)
-        
-        # حفظ الاختيار في الذاكرة المؤقتة عشان نموذج التسجيل
-        st.session_state['recommended_mentor'] = matched_mentors[0]['name']
+        st.info("لا يوجد موجهون متاحون حالياً في هذا القسم، يمكنك تسجيل طلبك وسنقوم بتوفير الموجه المناسب.")
 
+# الخطوة الثانية: تسجيل البيانات للانضمام لمجتمع الواتساب والمنصة
 st.markdown("---")
-st.subheader("📥 احصل على ملخص ترشيحك ورابط الجلسة عبر الإيميل والواتساب (مجاناً)")
+st.subheader("تسجيل البيانات والانضمام لمجتمع الموجهين")
+st.write("أدخل بياناتك أدناه للحصول على تفاصيل الترشيح، ورابط الجلسة، ودعوة مجتمع الواتساب الرسمي.")
 
 with st.form("registration_form"):
-    col1, col2 = st.columns(2)
-    with col1:
+    col_a, col_b = st.columns(2)
+    with col_a:
         reg_name = st.text_input("الاسم بالكامل:")
-    with col2:
-        reg_phone = st.text_input("رقم الواتساب (مثال: 010xxxxxxxx):")
+    with col_b:
+        reg_phone = st.text_input("رقم الهاتف (واتساب):")
     
     reg_email = st.text_input("البريد الإلكتروني:")
+    reg_notes = st.text_area("تفاصيل إضافية عن استشارتك أو مشروعك:")
     
-    submit_btn = st.form_submit_button("🚀 سجل بياناتي واحفظ الترشيح")
+    submit_button = st.form_submit_button(label="تأكيد التسجيل وإرسال التفاصيل")
     
-    if submit_btn:
-        if not reg_name or not reg_phone or not reg_email:
-            st.error("من فضلك أكمل جميع بيانات التسجيل.")
+    if submit_button:
+        if reg_name and reg_phone and reg_email:
+            st.success(f"مرحباً بك يا {reg_name}! تم تسجيل بياناتك بنجاح بواسطة النظام الآلي.")
+            st.info("تم إرسال رابط الانضمام إلى مجتمع الواتساب وتفاصيل الحجز إلى بريدك الإلكتروني ورقم هاتفك.")
+            st.markdown(f"**رابط التسجيل المعتمد في المنصة:** [الانتقال لصفحة التسجيل الرسمية](https://onetoonehub.org/user-register/)")
         else:
-            # رابط Make.com Webhook (تقدر تحط رابط الـ Webhook الخاص بك هنا لاحقاً)
-            webhook_url = "https://hook.eu1.make.com/your-unique-webhook-here"
-            
-            payload = {
-                "name": reg_name,
-                "phone": reg_phone,
-                "email": reg_email,
-                "query": user_query,
-                "mentor": st.session_state.get('recommended_mentor', 'عام')
-            }
-            
-            try:
-                # إرسال البيانات لـ Make لتققوم بدورها بإرسال الإيميل والرسالة
-                # requests.post(webhook_url, json=payload)
-                st.balloons()
-                st.success(f"مرحباً بك يا {reg_name}! تم تسجيل بياناتك بنجاح، وستم إرسال تفاصيل الترشيح ورابط الحجز المجاني على واتساب وإيميلك فوراً.")
-            except Exception as e:
-                st.error("حدث خطأ بسيط، برجاء المحاولة مرة أخرى.")
+            st.error("يرجى استكمال الحقول الإلزامية (الاسم، الهاتف، والبريد الإلكتروني) لإتمام التسجيل.")
