@@ -1,9 +1,12 @@
 import streamlit as st
 
-# Page Configuration with safe fallback for page icon
+# Logo URL from your GitHub Repository for page_icon and header
+LOGO_URL = "https://raw.githubusercontent.com/AmrMandour/1-1-HUB-Mentor-Agent/main/1to1%20HUB%20Logo.png"
+
+# Page Configuration with Logo URL as page_icon
 st.set_page_config(
     page_title="1:1 HUB - Smart Mentor Matcher",
-    page_icon="💼",
+    page_icon=LOGO_URL,
     layout="wide"
 )
 
@@ -26,7 +29,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Top Layout: Title on the right, Official Logo on the left with error handling
+# Top Layout: Title on the right, Official Logo on the left
 col_head1, col_head2 = st.columns([3, 1])
 
 with col_head1:
@@ -35,7 +38,7 @@ with col_head1:
 
 with col_head2:
     try:
-        st.image("1to1 HUB Logo.png", width=120)
+        st.image(LOGO_URL, width=120)
     except Exception:
         st.markdown("### 1:1 HUB")
 
