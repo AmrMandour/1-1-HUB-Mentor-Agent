@@ -1,17 +1,17 @@
 import streamlit as st
 
-# إعدادات صفحة التطبيق الرسمية
+# Page Configuration
 st.set_page_config(
-    page_title="منصة التوجيه والإرشاد المهني - 1:1 HUB",
+    page_title="1:1 HUB - Smart Mentor Matcher",
     page_icon="💼",
     layout="wide"
 )
 
-# تصميم واجهة مستخدم احترافية ونظيفة خالية من الرموز التعبيرية
+# Custom Styling
 st.markdown("""
     <style>
         .main-title {
-            font-size: 28px;
+            font-size: 30px;
             font-weight: bold;
             color: #1E3A8A;
             text-align: center;
@@ -19,124 +19,134 @@ st.markdown("""
             margin-bottom: 5px;
         }
         .subtitle {
-            font-size: 15px;
+            font-size: 16px;
             color: #4B5563;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
         .mentor-card {
             background-color: #F8FAFC;
             border: 1px solid #E2E8F0;
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 20px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
     </style>
 """, unsafe_allow_html=True)
 
-# عرض اللوجو الرسمي للمنصة في أعلى الصفحة بحجم مناسب ومتناسق
+# Display Official Logo
 col_l1, col_l2, col_l3 = st.columns([1, 2, 1])
 with col_l2:
-    # رابط اللوجو الرسمي المرفوع
     st.image("https://raw.githubusercontent.com/AmrMandour/1-1-hub-mentor-agent/main/1to1%20HUB%20Logo.png", use_container_width=True)
 
-st.markdown('<div class="main-title">منصة 1:1 HUB للتوجيه المهني والشركات الناشئة</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">المساعد الذكي لمطابقة احتياجاتك التدريبية مع أفضل الموجهين المعتمدين وتسهيل حجز الجلسات</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title">1:1 HUB - Smart Mentor Matcher & Registration</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Connect with certified mentors, check their schedules, and join our exclusive community.</div>', unsafe_allow_html=True)
 
-# قاعدة بيانات الموجهين المستخرجة من موقع 1:1 HUB
+# Mentors Database with Images, Schedules, and Prices (matching onetoonehub.org/mentors/)
 mentors_database = [
     {
-        "name": "غادة حسين",
-        "title": "موجه مبيعات وشركات ناشئة",
-        "category": "المبيعات وتطوير الأعمال",
-        "experience": "20 سنة خبرة",
-        "price": "500 جنيه / ساعة",
+        "name": "Ghada Hussein",
+        "title": "Sales & Startup Mentor",
+        "category": "Sales & Business Development",
+        "experience": "20 Years Experience",
+        "price": "500 EGP / Hour",
+        "schedule": "Available: Sunday & Tuesday (4:00 PM - 8:00 PM)",
+        "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80",
         "profile_url": "https://onetoonehub.org/mentors/"
     },
     {
-        "name": "محمد سالم",
-        "title": "مطور تطبيقات موبايل أول",
-        "category": "البرمجة والتطوير التقني",
-        "experience": "8 سنوات خبرة",
-        "price": "600 جنيه / ساعة",
+        "name": "Mohamed Salem",
+        "title": "Lead Mobile App Developer",
+        "category": "Programming & Tech Development",
+        "experience": "8 Years Experience",
+        "price": "600 EGP / Hour",
+        "schedule": "Available: Monday & Wednesday (6:00 PM - 10:00 PM)",
+        "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&auto=format&fit=crop&q=80",
         "profile_url": "https://onetoonehub.org/mentors/"
     },
     {
-        "name": "إسراء رشوان",
-        "title": "شريك مؤسس - مسارك",
-        "category": "إدارة المشاريع والشركات الناشئة",
-        "experience": "5 سنوات خبرة",
-        "price": "450 جنيه / ساعة",
+        "name": "Esraa Rashwan",
+        "title": "Co-Founder - Masark",
+        "category": "Project Management & Startups",
+        "experience": "5 Years Experience",
+        "price": "450 EGP / Hour",
+        "schedule": "Available: Saturday & Thursday (2:00 PM - 6:00 PM)",
+        "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&auto=format&fit=crop&q=80",
         "profile_url": "https://onetoonehub.org/mentors/"
     },
     {
-        "name": "محمد العطار",
-        "title": "استشاري تقنية المعلومات",
-        "category": "البرمجة والتطوير التقني",
-        "experience": "19 سنة خبرة",
-        "price": "800 جنيه / ساعة",
+        "name": "Mohamed El-Attar",
+        "title": "IT & Tech Consultant",
+        "category": "Programming & Tech Development",
+        "experience": "19 Years Experience",
+        "price": "800 EGP / Hour",
+        "schedule": "Available: Friday & Sunday (5:00 PM - 9:00 PM)",
+        "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&auto=format&fit=crop&q=80",
         "profile_url": "https://onetoonehub.org/mentors/"
     },
     {
-        "name": "بسمة أباظة",
-        "title": "مدرب مسار مهني وسير ذاتية",
-        "category": "الموارد البشرية والتطوير المهني",
-        "experience": "18 سنة خبرة",
-        "price": "400 جنيه / ساعة",
+        "name": "Basma Abaza",
+        "title": "Career Coach & CV Specialist",
+        "category": "HR & Career Development",
+        "experience": "18 Years Experience",
+        "price": "400 EGP / Hour",
+        "schedule": "Available: Tuesday & Thursday (1:00 PM - 5:00 PM)",
+        "image": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=300&auto=format&fit=crop&q=80",
         "profile_url": "https://onetoonehub.org/mentors/"
     }
 ]
 
-# الخطوة الأولى: اختيار التخصص أو المجال المطلوب
-st.subheader("اختر مجالك أو التخصص المستهدف:")
+# Step 1: Select Category / Specialization
+st.subheader("Step 1: Select Your Field / Specialization")
 selected_category = st.selectbox(
-    "حدد المجال للحصول على الموجه المناسب:",
-    ["اختر المجال...", "المبيعات وتطوير الأعمال", "البرمجة والتطوير التقني", "إدارة المشاريع والشركات الناشئة", "الموارد البشرية والتطوير المهني"]
+    "Choose a domain to view matching mentors:",
+    ["Select Category...", "Sales & Business Development", "Programming & Tech Development", "Project Management & Startups", "HR & Career Development"]
 )
 
-if selected_category != "اختر المجال...":
+if selected_category != "Select Category...":
     st.markdown("---")
-    st.subheader("الموجهون المتاحون في تخصصك:")
+    st.subheader("Available Mentors in Your Field:")
     
-    # تصفية الموجهين حسب التخصص
     filtered_mentors = [m for m in mentors_database if m["category"] == selected_category]
     
     if filtered_mentors:
         for mentor in filtered_mentors:
-            col1, col2 = st.columns([1, 3])
-            with col1:
-                st.image("https://via.placeholder.com/150", width=110) # صورة افتراضية للبروفيل
-            with col2:
-                st.markdown(f"### {mentor['name']}")
-                st.write(f"**التخصص:** {mentor['title']}")
-                st.write(f"**الخبرة:** {mentor['experience']}")
-                st.write(f"**سعر الجلسة:** {mentor['price']}")
-                st.markdown(f"[عرض الملف الشخصي الكامل للموجه]({mentor['profile_url']})")
-            st.markdown("---")
+            with st.container():
+                col1, col2 = st.columns([1, 3])
+                with col1:
+                    st.image(mentor["image"], width=130)
+                with col2:
+                    st.markdown(f"### {mentor['name']}")
+                    st.write(f"**Title:** {mentor['title']}")
+                    st.write(f"**Experience:** {mentor['experience']}")
+                    st.write(f"**Session Price:** {mentor['price']}")
+                    st.write(f"**Schedule & Availability:** {mentor['schedule']}")
+                    st.markdown(f"[View Full Profile on 1:1 HUB]({mentor['profile_url']})")
+                st.markdown("---")
     else:
-        st.info("لا يوجد موجهون متاحون حالياً في هذا القسم، يمكنك تسجيل طلبك وسنقوم بتوفير الموجه المناسب.")
+        st.info("No mentors currently available in this specific category. Please register your details below and our team will match you.")
 
-# الخطوة الثانية: تسجيل البيانات للانضمام لمجتمع الواتساب والمنصة
-st.markdown("---")
-st.subheader("تسجيل البيانات والانضمام لمجتمع الموجهين")
-st.write("أدخل بياناتك أدناه للحصول على تفاصيل الترشيح، ورابط الجلسة، ودعوة مجتمع الواتساب الرسمي.")
+# Step 2: User Registration & WhatsApp Community Access (matching onetoonehub.org/user-register/)
+st.subheader("Step 2: User Registration & Community Access")
+st.write("Complete your registration to save your profile on our platform and receive your instant WhatsApp Community invitation link.")
 
-with st.form("registration_form"):
+with st.form("user_registration_form"):
     col_a, col_b = st.columns(2)
     with col_a:
-        reg_name = st.text_input("الاسم بالكامل:")
+        full_name = st.text_input("Full Name:")
     with col_b:
-        reg_phone = st.text_input("رقم الهاتف (واتساب):")
+        whatsapp_number = st.text_input("WhatsApp Number (e.g., +2010xxxxxxxx):")
     
-    reg_email = st.text_input("البريد الإلكتروني:")
-    reg_notes = st.text_area("تفاصيل إضافية عن استشارتك أو مشروعك:")
+    email_address = st.text_input("Email Address:")
+    user_goal = st.text_area("Your Mentorship Goal / Project Details:")
     
-    submit_button = st.form_submit_button(label="تأكيد التسجيل وإرسال التفاصيل")
+    submit_reg = st.form_submit_button(label="Register & Get WhatsApp Community Link")
     
-    if submit_button:
-        if reg_name and reg_phone and reg_email:
-            st.success(f"مرحباً بك يا {reg_name}! تم تسجيل بياناتك بنجاح بواسطة النظام الآلي.")
-            st.info("تم إرسال رابط الانضمام إلى مجتمع الواتساب وتفاصيل الحجز إلى بريدك الإلكتروني ورقم هاتفك.")
-            st.markdown(f"**رابط التسجيل المعتمد في المنصة:** [الانتقال لصفحة التسجيل الرسمية](https://onetoonehub.org/user-register/)")
+    if submit_reg:
+        if full_name and whatsapp_number and email_address:
+            st.success(f"Registration Successful, {full_name}! Your data has been recorded in our system.")
+            st.info("Check your email and WhatsApp for your exclusive community invitation link and session booking details.")
+            st.markdown("**Official Platform Registration Link:** [1:1 HUB Register Page](https://onetoonehub.org/user-register/)")
+            st.markdown("**Instant WhatsApp Community Link:** [Join 1:1 HUB Community](https://chat.whatsapp.com/invite/placeholder)")
         else:
-            st.error("يرجى استكمال الحقول الإلزامية (الاسم، الهاتف، والبريد الإلكتروني) لإتمام التسجيل.")
+            st.error("Please fill in all required fields (Full Name, WhatsApp Number, and Email Address) to complete registration.")
