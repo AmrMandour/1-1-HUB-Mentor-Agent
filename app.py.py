@@ -1,9 +1,9 @@
 import streamlit as st
 
-# Page Configuration with Logo as page_icon (using the exact file name in your repo)
+# Page Configuration with safe fallback for page icon
 st.set_page_config(
     page_title="1:1 HUB - Smart Mentor Matcher",
-    page_icon="1to1 HUB Logo.png",
+    page_icon="💼",
     layout="wide"
 )
 
@@ -26,7 +26,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Top Layout: Title on the right, Official Logo on the left (as requested)
+# Top Layout: Title on the right, Official Logo on the left with error handling
 col_head1, col_head2 = st.columns([3, 1])
 
 with col_head1:
@@ -36,8 +36,8 @@ with col_head1:
 with col_head2:
     try:
         st.image("1to1 HUB Logo.png", width=120)
-    except:
-        st.write("1:1 HUB")
+    except Exception:
+        st.markdown("### 1:1 HUB")
 
 st.markdown("---")
 
@@ -109,7 +109,7 @@ if selected_category != "Select Category...":
                 st.write(f"**Experience:** {mentor['experience']}")
                 st.write(f"**Session Price:** {mentor['price']}")
                 st.write(f"**Schedule & Availability:** {mentor['schedule']}")
-                st.markdown(f"[View Full Profile on 1:1 HUB Website]({mentor['profile_url'])")
+                st.markdown(f"[View Full Profile on 1:1 HUB Website]({mentor['profile_url']})")
             st.markdown("---")
     else:
         st.info("No mentors currently available in this specific category. Please register below and our team will match you.")
@@ -137,7 +137,7 @@ with st.form("website_registration_form"):
             st.info(f"An automated confirmation email has been successfully sent to **{email_address}** containing your booking details.")
             st.markdown("---")
             st.markdown("### Next Steps & Links:")
-            st.markdown(f"1. **Official Platform Registration Page:** [Click Here to Access on Website](https://onetoonehub.org/user-register/)")
-            st.markdown(f"2. **Exclusive WhatsApp Community Link:** [Click Here to Join the Community](https://chat.whatsapp.com/invite/placeholder)")
+            st.markdown("1. **Official Platform Registration Page:** [Click Here to Access on Website](https://onetoonehub.org/user-register/)")
+            st.markdown("2. **Exclusive WhatsApp Community Link:** [Click Here to Join the Community](https://chat.whatsapp.com/invite/placeholder)")
         else:
             st.error("Please fill in all required fields (Full Name, Email Address, and WhatsApp Number) to complete your registration.")
