@@ -1,9 +1,9 @@
 import streamlit as st
 
-# Page Configuration
+# Page Configuration with Logo as page_icon
 st.set_page_config(
     page_title="1:1 HUB - Smart Mentor Matcher",
-    page_icon="💼",
+    page_icon="1to1 HUB Logo_3.png",
     layout="wide"
 )
 
@@ -34,24 +34,34 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Display Official Logo
+# Display Official Logo in Header
 col_l1, col_l2, col_l3 = st.columns([1, 2, 1])
 with col_l2:
-    st.image("https://raw.githubusercontent.com/AmrMandour/1-1-hub-mentor-agent/main/1to1%20HUB%20Logo.png", use_container_width=True)
+    st.image("1to1 HUB Logo_3.png", use_container_width=True)
 
 st.markdown('<div class="main-title">1:1 HUB - Smart Mentor Matcher & Registration</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Connect with certified mentors, check their schedules, and join our exclusive community.</div>', unsafe_allow_html=True)
 
-# Mentors Database with Images, Schedules, and Prices (matching onetoonehub.org/mentors/)
+# Official Mentors Database for 1:1 HUB
 mentors_database = [
     {
-        "name": "Ghada Hussein",
-        "title": "Sales & Startup Mentor",
+        "name": "Amr Mandour",
+        "title": "Business Development & Startup Expert",
         "category": "Sales & Business Development",
-        "experience": "20 Years Experience",
+        "experience": "6+ Years Experience",
         "price": "500 EGP / Hour",
         "schedule": "Available: Sunday & Tuesday (4:00 PM - 8:00 PM)",
-        "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80",
+        "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80",
+        "profile_url": "https://onetoonehub.org/mentors/"
+    },
+    {
+        "name": "Esraa Rashwan",
+        "title": "Co-Founder - Masark & 1:1 HUB",
+        "category": "Project Management & Startups",
+        "experience": "5 Years Experience",
+        "price": "450 EGP / Hour",
+        "schedule": "Available: Saturday & Thursday (2:00 PM - 6:00 PM)",
+        "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&auto=format&fit=crop&q=80",
         "profile_url": "https://onetoonehub.org/mentors/"
     },
     {
@@ -62,26 +72,6 @@ mentors_database = [
         "price": "600 EGP / Hour",
         "schedule": "Available: Monday & Wednesday (6:00 PM - 10:00 PM)",
         "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&auto=format&fit=crop&q=80",
-        "profile_url": "https://onetoonehub.org/mentors/"
-    },
-    {
-        "name": "Esraa Rashwan",
-        "title": "Co-Founder - Masark",
-        "category": "Project Management & Startups",
-        "experience": "5 Years Experience",
-        "price": "450 EGP / Hour",
-        "schedule": "Available: Saturday & Thursday (2:00 PM - 6:00 PM)",
-        "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&auto=format&fit=crop&q=80",
-        "profile_url": "https://onetoonehub.org/mentors/"
-    },
-    {
-        "name": "Mohamed El-Attar",
-        "title": "IT & Tech Consultant",
-        "category": "Programming & Tech Development",
-        "experience": "19 Years Experience",
-        "price": "800 EGP / Hour",
-        "schedule": "Available: Friday & Sunday (5:00 PM - 9:00 PM)",
-        "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&auto=format&fit=crop&q=80",
         "profile_url": "https://onetoonehub.org/mentors/"
     },
     {
@@ -99,7 +89,7 @@ mentors_database = [
 # Step 1: Select Category / Specialization
 st.subheader("Step 1: Select Your Field / Specialization")
 selected_category = st.selectbox(
-    "Choose a domain to view matching mentors:",
+    "Choose a domain to view matching mentors, schedules, and pricing:",
     ["Select Category...", "Sales & Business Development", "Programming & Tech Development", "Project Management & Startups", "HR & Career Development"]
 )
 
@@ -126,11 +116,11 @@ if selected_category != "Select Category...":
     else:
         st.info("No mentors currently available in this specific category. Please register your details below and our team will match you.")
 
-# Step 2: User Registration & WhatsApp Community Access (matching onetoonehub.org/user-register/)
-st.subheader("Step 2: User Registration & Community Access")
-st.write("Complete your registration to save your profile on our platform and receive your instant WhatsApp Community invitation link.")
+# Step 2: Direct User Registration Form linked with Official Website & Community
+st.subheader("Step 2: Register & Join the 1:1 HUB Community")
+st.write("Submit your information directly through our platform registration system to book a session and get instant access to our WhatsApp community.")
 
-with st.form("user_registration_form"):
+with st.form("official_registration_form"):
     col_a, col_b = st.columns(2)
     with col_a:
         full_name = st.text_input("Full Name:")
@@ -138,15 +128,16 @@ with st.form("user_registration_form"):
         whatsapp_number = st.text_input("WhatsApp Number (e.g., +2010xxxxxxxx):")
     
     email_address = st.text_input("Email Address:")
+    selected_mentor_choice = st.selectbox("Preferred Mentor (Optional):", ["Select Mentor...", "Amr Mandour", "Esraa Rashwan", "Mohamed Salem", "Basma Abaza"])
     user_goal = st.text_area("Your Mentorship Goal / Project Details:")
     
-    submit_reg = st.form_submit_button(label="Register & Get WhatsApp Community Link")
+    submit_reg = st.form_submit_button(label="Submit Registration & Get Community Link")
     
     if submit_reg:
         if full_name and whatsapp_number and email_address:
-            st.success(f"Registration Successful, {full_name}! Your data has been recorded in our system.")
-            st.info("Check your email and WhatsApp for your exclusive community invitation link and session booking details.")
-            st.markdown("**Official Platform Registration Link:** [1:1 HUB Register Page](https://onetoonehub.org/user-register/)")
-            st.markdown("**Instant WhatsApp Community Link:** [Join 1:1 HUB Community](https://chat.whatsapp.com/invite/placeholder)")
+            st.success(f"Thank you, {full_name}! Your registration has been successfully processed through our system.")
+            st.info("Your data has been linked to the platform. You can now complete your official registration or join the community directly below:")
+            st.markdown("**1. Official Platform Registration Page:** [Click Here to Register on Website](https://onetoonehub.org/user-register/)")
+            st.markdown("**2. Exclusive WhatsApp Community:** [Click Here to Join Community](https://chat.whatsapp.com/invite/placeholder)")
         else:
             st.error("Please fill in all required fields (Full Name, WhatsApp Number, and Email Address) to complete registration.")
