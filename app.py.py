@@ -8,22 +8,19 @@ GOOGLE_API_KEY = "AQ.Ab8RN6L3bAmzZiLK9DAf5h7SMyFTTrxh6TIBk_qczXHWJrVQ"
 
 try:
     genai.configure(api_key=GOOGLE_API_KEY)
-    # استخدام نموذج جيميناي السريع والحديث
     model = genai.GenerativeModel('gemini-1.5-flash')
 except Exception as e:
     model = None
 
-# Direct raw link to the official 1:1 HUB Logo on GitHub
 LOGO_URL = "https://raw.githubusercontent.com/AmrMandour/1-1-HUB-Mentor-Agent/main/1to1%20HUB%20Logo.png"
 
-# Page Configuration
 st.set_page_config(
     page_title="1:1 HUB - AI Mentor Matcher Agent",
     page_icon=LOGO_URL,
     layout="wide"
 )
 
-# Custom Styling to Hide Streamlit Branding & Clean Up UI
+# Custom Styling
 st.markdown("""
     <style>
     .main {background-color: #F8FAFC;}
@@ -37,7 +34,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Header Section
+# Header
 col_logo, col_title = st.columns([1, 6])
 with col_logo:
     try:
@@ -45,17 +42,18 @@ with col_logo:
     except:
         st.write("1:1 HUB")
 with col_title:
-    st.markdown("<h2 style='color: #1E3A8A; margin: 0;'>1:1 HUB — AI Mentor Matcher Agent</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #4B5563; margin: 0;'>Autonomous SME Growth Agent: Powered by Google Gemini AI, Dynamic Matching, & Automated Workflows.</p>", unsafe_allow_html=True)
+    st.markdown("<h2 style='color: #1E3A8A; margin: 0;'>1:1 HUB — Autonomous AI Mentor Matcher</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #4B5563; margin: 0;'>Interactive AI Consultant & Dynamic Expert Matching Engine</p>", unsafe_allow_html=True)
 
 st.markdown("---")
 
-# Mentors Database
-mentors_database = [
+# Dynamic Full Mentors Pool
+mentors_pool = [
     {
         "name": "Amr Mandour",
         "title": "Business Development & Startup Expert",
         "category": "Sales & Business Development",
+        "skills": ["sales", "marketing", "growth", "b2b", "leads", "revenue", "تسويق", "مبيعات", "تطوير أعمال"],
         "price": "500 EGP / Hour",
         "profile_url": "https://onetoonehub.org/mentors/"
     },
@@ -63,6 +61,7 @@ mentors_database = [
         "name": "Esraa Rashwan",
         "title": "Co-Founder - Masark & 1:1 HUB",
         "category": "Project Management & Operations",
+        "skills": ["project", "management", "operations", "strategy", "startup", "إدارة مشروعات", "عمليات", "استراتيجية"],
         "price": "450 EGP / Hour",
         "profile_url": "https://onetoonehub.org/mentors/"
     },
@@ -70,111 +69,107 @@ mentors_database = [
         "name": "Mohamed Salem",
         "title": "Lead Mobile App Developer",
         "category": "Programming & Tech Development",
+        "skills": ["tech", "app", "development", "code", "programming", "ai", "برمجة", "تطوير تطبيقات", "ذكاء اصطناعي"],
         "price": "600 EGP / Hour",
         "profile_url": "https://onetoonehub.org/mentors/"
     }
 ]
 
+if "messages" not in st.session_state:
+    st.session_state.messages = [
+        {"role": "assistant", "content": "أهلاً بك! أنا مساعد 1:1 HUB الذكي. احكي لي عن مشروعك، إيه التحدي اللي بتواجهه دلوقتي، ومحتاج تحققه في خلال ٣٠ يوم؟ وأنا هحلل مشكلتك وأرشح لك المنتور الأنسب ليك فوراً."}
+    ]
 if "bookings" not in st.session_state:
     st.session_state.bookings = []
-if "best_match" not in st.session_state:
-    st.session_state.best_match = None
+if "selected_mentor" not in st.session_state:
+    st.session_state.selected_mentor = "Amr Mandour"
 
-tab1, tab2, tab3 = st.tabs(["AI Readiness & Gemini AI Matcher", "Instant Booking & Automation", "Business Impact Dashboard"])
+tab1, tab2, tab3 = st.tabs(["Interactive AI Chat & Matcher", "Instant Booking & Automation", "Business Impact Dashboard"])
 
 with tab1:
-    st.subheader("Autonomous Gemini AI Readiness Assessment & Smart Matcher")
-    st.markdown("Complete the diagnostic. Google Gemini AI will analyze your startup challenge in real-time and match you with the ideal certified expert.")
+    st.subheader("Interactive Consultation with Gemini AI")
     
-    with st.form("ai_matching_form"):
-        st.markdown("### 5-Step SME Diagnostic")
-        
-        q1 = st.selectbox("1. What is your current startup stage?", ["Idea Stage", "Early MVP / Validation", "Revenue Generation", "Scaling / Growth"])
-        q2 = st.selectbox("2. What is your primary business bottleneck?", ["Sales & Customer Acquisition", "Operations & Project Management", "Product & Tech Architecture"])
-        q3 = st.slider("3. Rate your current go-to-market clarity (1-10):", 1, 10, 5)
-        q4 = st.text_input("4. Describe your core product, service, or business model:")
-        q5 = st.text_area("5. What specific milestone or challenge do you want to solve in 30 days?")
-        
-        run_match = st.form_submit_button("Run Google Gemini AI Analysis")
-        
-        if run_match:
-            if q4 and q5:
-                with st.spinner("Gemini AI is analyzing your startup profile and scanning 1:1 HUB experts..."):
-                    prompt = f"""
-                    You are an expert AI business analyst for 1:1 HUB. 
-                    A startup founder provided these details:
-                    - Stage: {q1}
-                    - Bottleneck: {q2}
-                    - Clarity Score: {q3}/10
-                    - Product/Model: {q4}
-                    - 30-Day Goal: {q5}
-
-                    We have 3 mentors available:
-                    1. Amr Mandour (Expert in Sales & Business Development)
-                    2. Esraa Rashwan (Expert in Project Management & Operations)
-                    3. Mohamed Salem (Expert in Programming & Tech Development)
-
-                    Task: Choose the best mentor match from these three based on the founder's bottleneck and goals. 
-                    Provide a professional, encouraging analysis explaining why this mentor is the perfect match.
-                    """
-                    
-                    ai_response = "Recommended Expert: Amr Mandour. Based on your business development needs, Amr will help accelerate your growth."
-                    if model:
-                        try:
-                            response = model.generate_content(prompt)
-                            ai_response = response.text
-                        except Exception as e:
-                            ai_response = f"AI Analysis completed. Recommended Expert: Amr Mandour (Sales & Business Development Expert) due to alignment with your growth goals."
-
-                # Set best match based on AI text output
-                if "Esraa" in ai_response:
-                    st.session_state.best_match = "Esraa Rashwan"
-                elif "Mohamed" in ai_response:
-                    st.session_state.best_match = "Mohamed Salem"
-                else:
-                    st.session_state.best_match = "Amr Mandour"
+    # Display chat history
+    for msg in st.session_state.messages:
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
+            
+    # Chat input
+    if user_input := st.chat_input("اكتب مشكلة مشروعك هنا (مثلاً: محتاج أزود المبيعات وأجيب عملاء B2B)..."):
+        st.session_state.messages.append({"role": "user", "content": user_input})
+        with st.chat_message("user"):
+            st.markdown(user_input)
+            
+        with st.chat_message("assistant"):
+            with st.spinner("جاري تحليل المشكلة ومراجعة كل المنتورز..."):
+                mentors_summary = "\n".join([f"- {m['name']} ({m['title']} - تخصص: {m['category']})" for m in mentors_pool])
                 
-                st.markdown(f"""
-                <div class="match-box">
-                    <h3 style='color: #1E3A8A; margin-top:0;'>Google Gemini AI Match Analysis</h3>
-                    <p>{ai_response}</p>
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.warning("Please fill in all required text fields (Questions 4 & 5) to run the AI analysis.")
+                system_prompt = f"""
+                You are an expert AI business consultant for 1:1 HUB. 
+                Here is the list of available mentors:
+                {mentors_summary}
+                
+                The user said: "{user_input}"
+                
+                Task: 
+                1. Analyze the user's startup problem.
+                2. Select the best matching mentor from the list.
+                3. Explain clearly why this mentor is the perfect match based on their expertise.
+                4. Give an encouraging professional response.
+                """
+                
+                reply = " بناءً على تحديك، أرشح لك الخبير Amr Mandour لمساعدتك في تطوير الأعمال وزيادة المبيعات."
+                if model:
+                    try:
+                        res = model.generate_content(system_prompt)
+                        reply = res.text
+                    except:
+                        pass
+                
+                if "Esraa" in reply:
+                    st.session_state.selected_mentor = "Esraa Rashwan"
+                elif "Mohamed" in reply:
+                    st.session_state.selected_mentor = "Mohamed Salem"
+                else:
+                    st.session_state.selected_mentor = "Amr Mandour"
+                    
+                st.markdown(reply)
+                st.session_state.messages.append({"role": "assistant", "content": reply})
 
     st.markdown("---")
-    st.subheader("1:1 HUB Certified Expert Directory")
-    for m in mentors_database:
-        st.markdown(f"""
-        <div class="mentor-card">
-            <h4>{m['name']} — <span style="font-size: 14px; color: #4B5563;">{m['title']}</span></h4>
-            <p><b>Category:</b> <code>{m['category']}</code> | <b>Rate:</b> {m['price']}</p>
-            <a href="{m['profile_url']}" target="_blank" style="color: #1E3A8A; font-weight: bold; text-decoration: none;">View Official Profile &rarr;</a>
-        </div>
-        """, unsafe_allow_html=True)
+    st.subheader("جميع المنتورز المتاحين في المنصة")
+    cols = st.columns(len(mentors_pool))
+    for idx, m in enumerate(mentors_pool):
+        with cols[idx]:
+            st.markdown(f"""
+            <div class="mentor-card">
+                <h4>{m['name']}</h4>
+                <p style="font-size: 13px; color: #4B5563;">{m['title']}</p>
+                <p><b>السعر:</b> {m['price']}</p>
+                <a href="{m['profile_url']}" target="_blank" style="color: #1E3A8A; font-weight: bold; text-decoration: none;">عرض البروفايل &rarr;</a>
+            </div>
+            """, unsafe_allow_html=True)
 
 with tab2:
-    st.subheader("Instant Session Booking & Automated Execution")
-    st.markdown("Book directly with your Gemini-matched expert.")
+    st.subheader("حجز الجلسة الفوري مع المنتور المقترح")
+    st.markdown(f"المنتور المقترح حالياً بواسطة الذكاء الاصطناعي: **{st.session_state.selected_mentor}**")
 
     default_idx = 0
-    if st.session_state.best_match:
-        for idx, m in enumerate(mentors_database):
-            if m["name"] == st.session_state.best_match:
-                default_idx = idx
+    for idx, m in enumerate(mentors_pool):
+        if m["name"] == st.session_state.selected_mentor:
+            default_idx = idx
 
     with st.form("booking_form"):
         col1, col2 = st.columns(2)
         with col1:
-            client_name = st.text_input("Full Name:")
-            client_email = st.text_input("Corporate Email:")
+            client_name = st.text_input("الاسم بالكامل:")
+            client_email = st.text_input("البريد الإلكتروني:")
         with col2:
-            client_whatsapp = st.text_input("WhatsApp / Phone:")
-            selected_expert = st.selectbox("Select Expert Mentor:", [m["name"] for m in mentors_database], index=default_idx)
+            client_whatsapp = st.text_input("رقم الواتساب:")
+            selected_expert = st.selectbox("اختر المنتور:", [m["name"] for m in mentors_pool], index=default_idx)
             
-        objective = st.text_area("Session Objective & Deliverable:")
-        confirm_booking = st.form_submit_button("Confirm Booking & Trigger Automation")
+        objective = st.text_area("هدف الجلسة أو التحدي المطلوب حله:")
+        confirm_booking = st.form_submit_button("تأكيد الحجز وتفعيل الأتمتة")
         
         if confirm_booking:
             if client_name and client_email and client_whatsapp and objective:
@@ -187,29 +182,28 @@ with tab2:
                 }
                 st.session_state.bookings.append(booking_record)
                 
-                # Make.com Webhook Integration
                 MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/your-unique-webhook-url-here"
                 try:
                     requests.post(MAKE_WEBHOOK_URL, json=booking_record, timeout=5)
                 except:
                     pass
                 
-                st.success(f"Booking successfully confirmed for {client_name} with {selected_expert}! Workflow executed.")
+                st.success(f"تم تأكيد حجزك بنجاح مع {selected_expert}! تم إرسال البيانات وإجراء الأتمتة.")
             else:
-                st.error("Please complete all fields.")
+                st.error("يرجى استكمال جميع الحقول المطلوبة.")
 
 with tab3:
-    st.subheader("Enterprise Business Impact Dashboard")
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Time Saved", "48 Hours / Week", "-95% Manual Work")
-    col2.metric("Cost Saved", "12,500 EGP", "Overhead Reduction")
-    col3.metric("Active SME Leads", len(st.session_state.bookings), "Live Pipeline")
+    st.subheader("لوحة مؤشرات الأثر التجاري")
+    c1, c2, c3 = st.columns(3)
+    c1.metric("الوقت المُوفر", "48 ساعة / أسبوع", "-95% عمل يدوي")
+    c2.metric("توفير التكاليف", "12,500 ج.م", "خفض التكاليف التشغيلية")
+    c3.metric("العملاء المحتملين", len(st.session_state.bookings), "حجم الـ Pipeline النشط")
     
     st.markdown("---")
     if len(st.session_state.bookings) > 0:
         df = pd.DataFrame(st.session_state.bookings)
         st.dataframe(df, use_container_width=True)
         csv_bytes = df.to_csv(index=False).encode('utf-8')
-        st.download_button("Export Analytics (CSV)", data=csv_bytes, file_name="leads_impact.csv", mime="text/csv")
+        st.download_button("تصدير تقرير التحليلات (CSV)", data=csv_bytes, file_name="leads_impact.csv", mime="text/csv")
     else:
-        st.info("No bookings recorded yet. Complete the AI analysis in Tab 1 and submit a test booking in Tab 2.")
+        st.info("لا توجد حجوزات مسجلة حتى الآن. جرب محادثة الذكاء الاصطناعي في تبويب 1 واحجز جلستك في تبويب 2.")
