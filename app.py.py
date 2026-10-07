@@ -35,28 +35,28 @@ st.markdown("<p style='color: #4B5563; margin-top: 0;'>Elite Business Coaching &
 
 st.markdown("---")
 
-# Official Mentors Pool with exact profile links & names
+# Official Mentors Pool extracted precisely from your screenshots
 mentors_pool = [
-    {"name": "Menna Ramadan", "title": "Alexandria, Iskala", "category": "General & Operations", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/menna-ramadan"},
-    {"name": "Tasneem Hassan", "title": "Career Consultant", "category": "Career & HR", "price": "450 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/tasneem-hassan"},
-    {"name": "Abdelaziz Sami", "title": "CEO, Tech Care", "category": "Tech & Leadership", "price": "600 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/abdelaziz-sami"},
-    {"name": "Khaled Elshahat", "title": "GEN AI COACH, Freelance", "category": "Artificial Intelligence", "price": "550 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/khaled-elshahat"},
-    {"name": "Yara Yousef", "title": "HR Supervisor", "category": "HR & Consulting", "price": "450 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/yara-yousef"},
-    {"name": "Mohamed Kamal", "title": "Content Manager, WaynWay Agency", "category": "Creatives & Content", "price": "450 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/mohamed-kamal"},
-    {"name": "Dina Mohamed Tawfik", "title": "Voice Over Talent Mentor", "category": "Media & Journalism", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/dina-mohamed-tawfik"},
-    {"name": "Amr Al-Khudair", "title": "Co-Founder & CTO, Anwan", "category": "Engineering & Tech", "price": "700 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/amr-al-khudair"},
-    {"name": "Abeer Ahmed", "title": "Talent Acquisition | OD", "category": "HR & Consulting", "price": "500 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/abeer-ahmed"},
-    {"name": "Nada Osman", "title": "Design Supervisor, Udacity", "category": "Graphic Design", "price": "500 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/nada-osman"},
-    {"name": "Ahmed Ibrahim", "title": "HR Consulting", "category": "Consulting & HR", "price": "500 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/ahmed-ibrahim"},
-    {"name": "Mohamed ElAttar", "title": "IT Consultant", "category": "IT & Start-up", "price": "650 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/mohamed-elattar"},
-    {"name": "Ghada Hussein", "title": "Sales Mentor", "category": "Sales & Start-up", "price": "600 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/ghada-hussein"},
-    {"name": "Basma Sobh", "title": "Voiceover & Dubbing Artist", "category": "Media & Journalism", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/basma-sobh"},
-    {"name": "Mohammed Salem", "title": "Senior Mobile Developer", "category": "Android & Mobile", "price": "600 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/mohamed-salem"},
-    {"name": "Noha Radwan", "title": "Freelancing Mentor", "category": "Creatives & Freelancing", "price": "450 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/noha-radwan"},
-    {"name": "Mohamed Bashandy", "title": "Business Development", "category": "Consulting & Business Dev", "price": "550 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/mohamed-bashandy"},
-    {"name": "Donia Mohamed", "title": "Content Creation - Storyteller", "category": "Media & Journalism", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/donia-mohamed"},
-    {"name": "Hend Ayoub", "title": "Content Creator", "category": "Digital Marketing", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/hend-ayoub"},
-    {"name": "Saleh ElGaberty", "title": "Ai & Systems Adviser", "category": "AI & Systems", "price": "700 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/saleh-elgaberty"}
+    {"name": "Menna Ramadan", "title": "Alexandria, Iskala", "category": "General & Operations", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/user/menna-ramadan"},
+    {"name": "Tasneem Hassan", "title": "Career Consultant", "category": "Career & HR", "price": "450 EGP / Hour", "profile_url": "https://onetoonehub.org/user/tasneem-hassan"},
+    {"name": "Abdelaziz Sami", "title": "CEO, Tech Care", "category": "Tech & Leadership", "price": "600 EGP / Hour", "profile_url": "https://onetoonehub.org/user/abdelaziz-sami"},
+    {"name": "Khaled Elshahat", "title": "GEN AI COACH, Freelance", "category": "Artificial Intelligence", "price": "550 EGP / Hour", "profile_url": "https://onetoonehub.org/user/khaled-elshahat"},
+    {"name": "Yara Yousef", "title": "HR Supervisor", "category": "HR & Consulting", "price": "450 EGP / Hour", "profile_url": "https://onetoonehub.org/user/yara-yousef"},
+    {"name": "Mohamed Kamal", "title": "Content Manager, WaynWay Agency", "category": "Creatives & Content", "price": "450 EGP / Hour", "profile_url": "https://onetoonehub.org/user/mohamedkamalabuzaid"},
+    {"name": "Dina Mohamed Tawfik", "title": "Voice Over Talent Mentor, Freelancer", "category": "Media & Journalism", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/user/dina-mohamed-tawfik"},
+    {"name": "Amr Al-Khudair", "title": "Co-Founder & CTO, Anwan", "category": "Engineering & Tech", "price": "700 EGP / Hour", "profile_url": "https://onetoonehub.org/user/amr-al-khudair"},
+    {"name": "Abeer Ahmed", "title": "Talent Acquisition|OD, Partner Consultancy", "category": "HR & Consulting", "price": "500 EGP / Hour", "profile_url": "https://onetoonehub.org/user/abeer-ahmed"},
+    {"name": "Nada Osman", "title": "Design Supervisor, Udacity", "category": "Graphic Design", "price": "500 EGP / Hour", "profile_url": "https://onetoonehub.org/user/nadaosman24"},
+    {"name": "Ahmed Ibrahim", "title": "HR Consulting", "category": "Consulting & HR", "price": "500 EGP / Hour", "profile_url": "https://onetoonehub.org/user/ahmed-ibrahim"},
+    {"name": "Mohamed ElAttar", "title": "IT Consultant", "category": "IT & Start-up", "price": "650 EGP / Hour", "profile_url": "https://onetoonehub.org/user/mohamed-elattar"},
+    {"name": "Ghada Hussein", "title": "Sales Mentor", "category": "Sales & Start-up", "price": "600 EGP / Hour", "profile_url": "https://onetoonehub.org/user/ghada-hussein"},
+    {"name": "Basma Sobh", "title": "Voiceover & Dubbing Artist", "category": "Media & Journalism", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/user/basma-sobh"},
+    {"name": "Mohammed Salem", "title": "Senior Mobile Developer", "category": "Android & Mobile", "price": "600 EGP / Hour", "profile_url": "https://onetoonehub.org/user/mohammed-salem"},
+    {"name": "Noha Radwan", "title": "Freelancing Mentor", "category": "Creatives & Freelancing", "price": "450 EGP / Hour", "profile_url": "https://onetoonehub.org/user/noha-radwan"},
+    {"name": "Mohamed Bashandy", "title": "Business Development", "category": "Consulting & Business Dev", "price": "550 EGP / Hour", "profile_url": "https://onetoonehub.org/user/mohamed-bashandy"},
+    {"name": "Donia Mohamed", "title": "Content Creation - Storyteller", "category": "Media & Journalism", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/user/donia-mohamed"},
+    {"name": "Hend Ayoub", "title": "Content Creator", "category": "Digital Marketing", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/user/hend-ayoub"},
+    {"name": "Saleh ElGaberty", "title": "Ai & Systems Adviser", "category": "AI & Systems", "price": "700 EGP / Hour", "profile_url": "https://onetoonehub.org/user/saleh-elgaberty"}
 ]
 
 if "selected_mentor" not in st.session_state:
