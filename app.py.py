@@ -10,11 +10,8 @@ try:
 except Exception as e:
     model = None
 
-LOGO_URL = "https://raw.githubusercontent.com/AmrMandour/1-1-HUB-Mentor-Agent/main/1to1%20HUB%20Logo.png"
-
 st.set_page_config(
     page_title="1:1 HUB - AI Mentor Matcher Agent",
-    page_icon=LOGO_URL,
     layout="wide"
 )
 
@@ -24,28 +21,21 @@ st.markdown("""
     .stButton>button {background-color: #1E3A8A; color: white; border-radius: 8px; width: 100%; height: 45px; font-weight: bold;}
     .stButton>button:hover {background-color: #3B82F6; color: white;}
     .mentor-card {background: white; padding: 18px; border-radius: 12px; border: 1px solid #E2E8F0; margin-bottom: 15px; height: 210px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
-    .profile-btn {display: inline-block; background-color: #1E3A8A; color: white !important; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 10px;}
-    .profile-btn:hover {background-color: #3B82F6;}
+    .profile-link {display: inline-block; background-color: #1E3A8A; color: white !important; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 10px;}
+    .profile-link:hover {background-color: #3B82F6;}
     footer {visibility: hidden;}
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     </style>
 """, unsafe_allow_html=True)
 
-# Header
-col_logo, col_title = st.columns([1, 6])
-with col_logo:
-    try:
-        st.image(LOGO_URL, width=85)
-    except:
-        st.write("1:1 HUB")
-with col_title:
-    st.markdown("<h2 style='color: #1E3A8A; margin: 0;'>1:1 HUB — Autonomous AI Mentor Matcher Agent</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #4B5563; margin: 0;'>Elite Business Coaching & Dynamic Expert Matching Engine (onetoonehub.org/mentors)</p>", unsafe_allow_html=True)
+# Clean Header without logos/icons
+st.markdown("<h2 style='color: #1E3A8A; margin-bottom: 0;'>1:1 HUB — Autonomous AI Mentor Matcher Agent</h2>", unsafe_allow_html=True)
+st.markdown("<p style='color: #4B5563; margin-top: 0;'>Elite Business Coaching & Dynamic Expert Matching Engine</p>", unsafe_allow_html=True)
 
 st.markdown("---")
 
-# Official Mentors Pool with specific individual profile links
+# Official Mentors Pool with exact profile links & names
 mentors_pool = [
     {"name": "Menna Ramadan", "title": "Alexandria, Iskala", "category": "General & Operations", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/menna-ramadan"},
     {"name": "Tasneem Hassan", "title": "Career Consultant", "category": "Career & HR", "price": "450 EGP / Hour", "profile_url": "https://onetoonehub.org/mentors/tasneem-hassan"},
@@ -74,14 +64,14 @@ if "selected_mentor" not in st.session_state:
 if "bookings" not in st.session_state:
     st.session_state.bookings = []
 
-tab1, tab2, tab3, tab4 = st.tabs(["AI Coaching & Assessment", "Interactive Chat & Directory", "Instant Booking", "Business Impact"])
+tab1, tab2, tab3, tab4 = st.tabs(["AI Coaching Assessment", "Experts Directory & Chat", "Instant Booking", "Business Impact"])
 
 with tab1:
-    st.subheader("🎯 Strategic AI Coaching & Diagnostic Assessment")
-    st.markdown("As an executive business coach, please answer the following diagnostic questions to help our AI Agent analyze your core challenges and match you with the precise expert to maximize your ROI:")
+    st.subheader("Strategic AI Coaching & Diagnostic Assessment")
+    st.markdown("Answer the diagnostic questions below to let our AI Agent analyze your core challenges and match you with the precise expert:")
 
     with st.form("assessment_form"):
-        q1 = st.selectbox("1. What primary domain requires urgent expert intervention for your growth or project?", [
+        q1 = st.selectbox("1. What primary domain requires urgent expert intervention?", [
             "Tech & AI Architecture (Software & Artificial Intelligence)",
             "Sales, Business Growth & Market Penetration",
             "Operations Management & Process Optimization",
@@ -90,19 +80,19 @@ with tab1:
             "Visual Design, Media & Voice Production"
         ])
         
-        q2 = st.selectbox("2. What is your current developmental stage or situation?", [
+        q2 = st.selectbox("2. What is your current developmental stage?", [
             "Early Ideation & Concept Validation Stage",
             "Career Transition / Professional Upskilling",
             "Early-Stage Operations & Execution Challenges",
             "Scaling, Team Leadership & Enterprise Growth"
         ])
         
-        q3 = st.text_area("3. Briefly describe your core challenge and the desired outcome from this mentorship session:")
+        q3 = st.text_area("3. Briefly describe your core challenge and the desired outcome:")
         
         submit_assessment = st.form_submit_button("Run Strategic AI Matcher Agent")
 
     if submit_assessment:
-        with st.spinner("Analyzing operational parameters and matching elite profiles..."):
+        with st.spinner("Analyzing parameters and matching elite profiles..."):
             mentors_summary = "\n".join([f"- Name: {m['name']} | Title: {m['title']} | Category: {m['category']}" for m in mentors_pool])
             
             prompt = f"""
@@ -122,7 +112,7 @@ with tab1:
             4. Provide a professional, high-value coaching rationale explaining the strategic fit in English.
             """
             
-            ai_reply = f"Recommended Expert: Abdelaziz Sami\n\nBased on your strategic assessment inputs, Abdelaziz Sami possesses the ideal technical and operational expertise to resolve your current challenges and achieve your targets."
+            ai_reply = f"Recommended Expert: Abdelaziz Sami\n\nBased on your strategic assessment inputs, Abdelaziz Sami possesses the ideal technical and operational expertise to resolve your current challenges."
             if model:
                 try:
                     res = model.generate_content(prompt)
@@ -142,20 +132,21 @@ with tab1:
                 
             st.success("Assessment analyzed and expert matched successfully!")
             st.markdown(ai_reply)
-            st.info(f"✨ Expert ({st.session_state.selected_mentor}) has been automatically assigned to the booking tab for immediate session scheduling.")
+            st.info(f"Expert ({st.session_state.selected_mentor}) has been automatically assigned to the booking tab.")
 
 with tab2:
-    st.subheader("Interactive Chat & Official Mentors Directory")
+    st.subheader("Certified Experts Directory & Direct Profiles")
     
     user_free_text = st.chat_input("Type your advisory inquiry here...")
     if user_free_text:
         with st.chat_message("user"):
             st.markdown(user_free_text)
         with st.chat_message("assistant"):
-            st.write(f"As your AI consultant, I recommend connecting with: **{st.session_state.selected_mentor}** to achieve optimal results.")
+            st.write(f"I recommend connecting with: **{st.session_state.selected_mentor}** for your inquiry.")
 
     st.markdown("---")
-    st.markdown("### Certified Experts Directory (20 Mentors with Official Profiles)")
+    st.markdown("### All 20 Official Mentors & Direct Profile Links")
+    
     cols = st.columns(3)
     for idx, m in enumerate(mentors_pool):
         with cols[idx % 3]:
@@ -165,13 +156,13 @@ with tab2:
                 <span style="font-size: 11px; color: #4B5563;">{m['title']}</span><br>
                 <span style="font-size: 11px; color: #0284C7;"><b>Category:</b> {m['category']}</span><br>
                 <span style="font-size: 11px; color: #059669;"><b>Rate:</b> {m['price']}</span><br>
-                <a href="{m['profile_url']}" target="_blank" class="profile-btn">View Profile &rarr;</a>
+                <a href="{m['profile_url']}" target="_blank" class="profile-link">View Official Profile &rarr;</a>
             </div>
             """, unsafe_allow_html=True)
 
 with tab3:
     st.subheader("Instant Executive Session Booking")
-    st.markdown(f"Currently Selected Expert for Session: **{st.session_state.selected_mentor}**")
+    st.markdown(f"Currently Selected Expert: **{st.session_state.selected_mentor}**")
 
     default_idx = 0
     for idx, m in enumerate(mentors_pool):
@@ -184,11 +175,11 @@ with tab3:
             client_name = st.text_input("Full Name / Company Name:")
             client_email = st.text_input("Professional Email:")
         with c2:
-            client_whatsapp = st.text_input("WhatsApp Number for Confirmation:")
-            selected_expert = st.selectbox("Assigned Expert (Auto-selected by AI):", [m["name"] for m in mentors_pool], index=default_idx)
+            client_whatsapp = st.text_input("WhatsApp Number:")
+            selected_expert = st.selectbox("Assigned Expert:", [m["name"] for m in mentors_pool], index=default_idx)
             
-        objective = st.text_area("Session Objectives & Detailed Challenges to Solve:")
-        confirm_booking = st.form_submit_button("Confirm Executive Mentorship Booking")
+        objective = st.text_area("Session Objectives & Challenges:")
+        confirm_booking = st.form_submit_button("Confirm Booking")
         
         if confirm_booking:
             if client_name and client_email and client_whatsapp and objective:
@@ -200,22 +191,22 @@ with tab3:
                     "Objective": objective
                 }
                 st.session_state.bookings.append(booking_record)
-                st.success(f"Booking confirmed successfully with {selected_expert}! We will reach out shortly to schedule your session.")
+                st.success(f"Booking confirmed successfully with {selected_expert}!")
             else:
-                st.error("Please complete all required fields to secure your session.")
+                st.error("Please complete all required fields.")
 
 with tab4:
     st.subheader("Enterprise Business Impact & Dashboard")
     c1, c2, c3 = st.columns(3)
     c1.metric("Matching Efficiency", "98.5%", "+40% Conversion")
-    c2.metric("Administrative Time Saved", "54 Hours / Mo", "Automated Ops")
-    c3.metric("Confirmed Bookings", len(st.session_state.bookings), "Active Pipeline")
+    c2.metric("Time Saved", "54 Hours / Mo", "Automated Ops")
+    c3.metric("Bookings", len(st.session_state.bookings), "Active Pipeline")
     
     st.markdown("---")
     if len(st.session_state.bookings) > 0:
         df = pd.DataFrame(st.session_state.bookings)
         st.dataframe(df, use_container_width=True)
         csv_bytes = df.to_csv(index=False).encode('utf-8')
-        st.download_button("Export Execution Report (CSV)", data=csv_bytes, file_name="executive_mentorship_reports.csv", mime="text/csv")
+        st.download_button("Export Report (CSV)", data=csv_bytes, file_name="mentorship_reports.csv", mime="text/csv")
     else:
-        st.info("No bookings recorded yet. Use the AI Coaching Assessment tab to test expert matching and live bookings.")
+        st.info("No bookings recorded yet.")
