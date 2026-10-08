@@ -25,7 +25,6 @@ st.markdown("""
     .mentor-card {background: white; padding: 20px; border-radius: 12px; border: 1px solid #E2E8F0; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);}
     .profile-link {display: inline-block; background-color: #1E3A8A; color: white !important; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 12px;}
     .profile-link:hover {background-color: #3B82F6;}
-    .metric-container {background: white; padding: 15px; border-radius: 10px; border: 1px solid #E2E8F0; text-align: center;}
     footer {visibility: hidden;}
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
@@ -70,8 +69,8 @@ if "bookings" not in st.session_state:
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# Main Navigation Tabs
-tab1, tab2, tab3, tab4 = st.tabs(["🎯 AI Matcher & Consultation", "👥 Experts Directory & Filter", "📅 Instant Executive Booking", "📊 Enterprise Dashboard"])
+# Main Navigation Tabs (بدون أي إيموجيز)
+tab1, tab2, tab3, tab4 = st.tabs(["AI Matcher & Consultation", "Experts Directory & Filter", "Instant Executive Booking", "Enterprise Dashboard"])
 
 with tab1:
     st.subheader("Strategic AI Assessment Engine")
@@ -174,7 +173,6 @@ with tab1:
 with tab2:
     st.subheader("Certified Experts Directory & Instant Filter")
     
-    # Value Add: Live Category Filter & Search Bar
     col_f1, col_f2 = st.columns(2)
     with col_f1:
         categories = ["All Categories"] + sorted(list(set(m["category"] for m in mentors_pool)))
