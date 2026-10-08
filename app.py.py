@@ -1,13 +1,8 @@
 import streamlit as st
 import pandas as pd
 import google.generativeai as genai
-import threading
-from telegram import Update
-from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
 
-# التوكنات والـ API Keys الخاصة بك
 GOOGLE_API_KEY = "AQ.Ab8RN6L3bAmzZiLK9DAf5h7SMyFTTrxh6TIBk_qczXHWJrVQ"
-TELEGRAM_BOT_TOKEN = "8995232710:AAEzNeHiFTm-VctkubZCP8pmGII4beoqR1I"
 
 try:
     genai.configure(api_key=GOOGLE_API_KEY)
@@ -16,7 +11,7 @@ except Exception as e:
     model = None
 
 st.set_page_config(
-    page_title="1:1 HUB - Integrated AI Ecosystem",
+    page_title="1:1 HUB - AI Mentor Matcher Ecosystem",
     layout="wide"
 )
 
@@ -35,12 +30,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header
-st.markdown("<h2 style='color: #1E3A8A; margin-bottom: 0;'>1:1 HUB — Omni-Channel AI Mentor Matcher Ecosystem</h2>", unsafe_allow_html=True)
-st.markdown("<p style='color: #4B5563; margin-top: 0;'>Integrated Streamlit Web Platform & Telegram Bot Engine (onetoonehub.org)</p>", unsafe_allow_html=True)
+st.markdown("<h2 style='color: #1E3A8A; margin-bottom: 0;'>1:1 HUB — AI Mentor Matcher Ecosystem</h2>", unsafe_allow_html=True)
+st.markdown("<p style='color: #4B5563; margin-top: 0;'>Official Web Platform & Intelligent Assessment Engine (onetoonehub.org)</p>", unsafe_allow_html=True)
 
 st.markdown("---")
 
-# Official Mentors Pool extracted precisely from 1:1 HUB
+# Official Mentors Pool
 mentors_pool = [
     {"name": "Menna Ramadan", "title": "Alexandria, Iskala", "category": "General & Operations", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/user/menna-ramadan"},
     {"name": "Tasneem Hassan", "title": "Career Consultant", "category": "Career & HR", "price": "450 EGP / Hour", "profile_url": "https://onetoonehub.org/user/tasneem-hassan"},
@@ -68,13 +63,17 @@ if "selected_mentor" not in st.session_state:
     st.session_state.selected_mentor = "Abdelaziz Sami"
 if "bookings" not in st.session_state:
     st.session_state.bookings = []
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["AI Coaching Assessment", "Experts Directory", "Instant Booking", "Telegram Bot Manager", "Business Impact"])
+tab1, tab2, tab3, tab4 = st.tabs(["AI Coaching Assessment & Chat", "Experts Directory", "Instant Booking", "Business Dashboard"])
 
 with tab1:
-    st.subheader("Strategic AI Coaching & Diagnostic Assessment")
+    st.subheader("Strategic AI Coaching & Interactive English Assessment")
+    st.markdown("Complete the assessment below in English, and our intelligent agent will generate your expert match and open the interactive consultation chat:")
+
     with st.form("assessment_form"):
-        q1 = st.selectbox("1. What primary domain requires urgent expert intervention?", [
+        q1 = st.selectbox("1. Select primary domain requiring expert intervention:", [
             "Tech & AI Architecture (Software & Artificial Intelligence)",
             "Sales, Business Growth & Market Penetration",
             "Operations Management & Process Optimization",
@@ -82,38 +81,75 @@ with tab1:
             "HR, Team Building & Career Development",
             "Visual Design, Media & Voice Production"
         ])
-        q2 = st.selectbox("2. What is your current developmental stage?", [
+        q2 = st.selectbox("2. Select your current developmental stage:", [
             "Early Ideation & Concept Validation Stage",
             "Career Transition / Professional Upskilling",
             "Early-Stage Operations & Execution Challenges",
             "Scaling, Team Leadership & Enterprise Growth"
         ])
-        q3 = st.text_area("3. Briefly describe your core challenge and the desired outcome:")
-        submit_assessment = st.form_submit_button("Run Strategic AI Matcher Agent")
+        q3 = st.text_area("3. Describe your core challenge and desired objective (in English):")
+        submit_assessment = st.form_submit_button("Run AI Assessment & Start Chat")
 
     if submit_assessment:
-        with st.spinner("Analyzing parameters..."):
+        with st.spinner("Analyzing parameters and initializing expert chat..."):
             mentors_summary = "\n".join([f"- Name: {m['name']} | Title: {m['title']} | Profile: {m['profile_url']}" for m in mentors_pool])
             prompt = f"""
             You are an elite Business Development Expert and Executive Coach for 1:1 HUB.
             Here is our complete roster of official mentors:
             {mentors_summary}
             Client Inputs: Focus: {q1}, Stage: {q2}, Goal: {q3}
-            Task: Select the EXACT ONE mentor who fits best. Start with "Recommended Expert: [Name]" and give coaching advice.
+            Task: Select the EXACT ONE mentor who fits best. Start your response strictly with "Recommended Expert: [Name]" followed by a high-value coaching strategy and mention their direct profile link.
             """
-            ai_reply = f"Recommended Expert: Abdelaziz Sami\n\nBased on your inputs, Abdelaziz Sami is the ideal fit."
+            ai_reply = f"Recommended Expert: Abdelaziz Sami\n\nBased on your assessment inputs, Abdelaziz Sami is the ideal mentor to assist you with your technical and strategic goals. View profile: https://onetoonehub.org/user/abdelaziz-sami"
             if model:
                 try:
                     res = model.generate_content(prompt)
                     ai_reply = res.text
                 except:
                     pass
+            
             for m in mentors_pool:
                 if m["name"].lower() in ai_reply.lower():
                     st.session_state.selected_mentor = m["name"]
                     break
-            st.success("Assessment analyzed successfully!")
-            st.markdown(ai_reply)
+
+            st.session_state.chat_history = [{"role": "assistant", "content": ai_reply}]
+            st.success("Assessment completed successfully! Interactive chat is now active below.")
+
+    st.markdown("---")
+    st.subheader("Interactive AI Consultation Chat")
+    
+    # Display chat messages
+    for message in st.session_state.chat_history:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    user_chat_input = st.chat_input("Type your follow-up question in English...")
+    if user_chat_input:
+        st.session_state.chat_history.append({"role": "user", "content": user_chat_input})
+        with st.chat_message("user"):
+            st.markdown(user_chat_input)
+
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                mentors_summary = "\n".join([f"- Name: {m['name']} | Title: {m['title']} | Profile: {m['profile_url']}" for m in mentors_pool])
+                chat_prompt = f"""
+                You are an elite Business Development AI Assistant for 1:1 HUB mentorship platform.
+                Mentors Roster:
+                {mentors_summary}
+                Current Selected Mentor: {st.session_state.selected_mentor}
+                User message: {user_chat_input}
+                Provide an expert response, recommending relevant mentors and their profile links when appropriate.
+                """
+                reply = "I recommend connecting with our experts for this inquiry."
+                if model:
+                    try:
+                        res = model.generate_content(chat_prompt)
+                        reply = res.text
+                    except:
+                        pass
+                st.markdown(reply)
+                st.session_state.chat_history.append({"role": "assistant", "content": reply})
 
 with tab2:
     st.subheader("Certified Experts Directory & Direct Profiles")
@@ -145,62 +181,23 @@ with tab3:
         confirm_booking = st.form_submit_button("Confirm Booking")
         if confirm_booking:
             if client_name and client_email and client_whatsapp:
-                st.session_state.bookings.append({"Client": client_name, "Expert": selected_expert, "Channel": "Web Platform"})
+                st.session_state.bookings.append({"Client": client_name, "Email": client_email, "Expert": selected_expert})
                 st.success(f"Booking confirmed successfully with {selected_expert}!")
             else:
-                st.error("Please complete required fields.")
+                st.error("Please complete all required fields.")
 
 with tab4:
-    st.subheader("🤖 Telegram Bot Omni-Channel Integration")
-    st.markdown("البوت متصل حالياً بنجاح برقم الـ Token الخاص بك ويعمل بلينكات بروفايلات `onetoonehub.org`.")
-    st.info(f"Bot Username / Token Status: متصل (Token ID: 8995232710...)")
-    st.markdown("""
-    **لإشراك وتشغيل بوت التيليجرام:**
-    قم بتشغيل ملف السكريبت في الخلفية أو عبر سيرفر منفصل ليقوم بالرد التلقائي على عملاء تيليجرام وترشيح المنتورز فوراً عند مراسلتهم على `t.me/OneToOneHubBot`.
-    """)
-
-with tab5:
     st.subheader("Enterprise Business Impact & Dashboard")
     c1, c2, c3 = st.columns(3)
     c1.metric("Matching Efficiency", "98.5%", "+40% Conversion")
     c2.metric("Time Saved", "54 Hours / Mo", "Automated Ops")
     c3.metric("Total Bookings", len(st.session_state.bookings), "Active Pipeline")
+    
+    st.markdown("---")
     if len(st.session_state.bookings) > 0:
-        st.dataframe(pd.DataFrame(st.session_state.bookings), use_container_width=True)
-
-# دالة لتشغيل بوت تيليجرام في الخلفية تلقائياً مع الويب
-def run_telegram_bot():
-    try:
-        async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-            user_text = update.message.text
-            mentors_summary = "\n".join([f"- Name: {m['name']} | Title: {m['title']} | Profile: {m['profile_url']}" for m in mentors_pool])
-            prompt = f"""
-            You are an elite Business Development AI Assistant for 1:1 HUB mentorship platform.
-            Here is our roster of mentors:
-            {mentors_summary}
-            User Inquiry: "{user_text}"
-            Task: Recommend the best matching mentor, give their exact name, title, and direct profile link.
-            """
-            try:
-                response = model.generate_content(prompt)
-                reply_text = response.text
-            except:
-                reply_text = "أهلاً بك في 1:1 HUB. يرجى محاولة إرسال استفسارك مرة أخرى."
-            await update.message.reply_text(reply_text)
-
-        import asyncio
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        
-        from telegram.ext import Application
-        app_bot = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
-        app_bot.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
-        
-        app_bot.run_polling()
-    except Exception as e:
-        pass
-
-# تشغيل البوت في خلفية النظام مرة واحدة
-if 'bot_started' not in st.session_state:
-    st.session_state.bot_started = True
-    threading.Thread(target=run_telegram_bot, daemon=True).start()
+        df = pd.DataFrame(st.session_state.bookings)
+        st.dataframe(df, use_container_width=True)
+        csv_bytes = df.to_csv(index=False).encode('utf-8')
+        st.download_button("Export Bookings Report (CSV)", data=csv_bytes, file_name="bookings_report.csv", mime="text/csv")
+    else:
+        st.info("No bookings recorded yet.")
