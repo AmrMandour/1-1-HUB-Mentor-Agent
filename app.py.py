@@ -34,6 +34,7 @@ st.markdown("<p style='color: #4B5563; margin-top: 0;'>Official Web Platform & I
 
 st.markdown("---")
 
+# القائمة الكاملة لكل المنتورز وتخصصاتهم ولينكاتهم الحقيقية
 mentors_pool = [
     {"name": "Menna Ramadan", "title": "Alexandria, Iskala", "category": "General & Operations", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/user/menna-ramadan"},
     {"name": "Tasneem Hassan", "title": "Career Consultant", "category": "Career & HR", "price": "450 EGP / Hour", "profile_url": "https://onetoonehub.org/user/tasneem-hassan"},
@@ -87,16 +88,21 @@ with tab1:
         submit_assessment = st.form_submit_button("Run AI Assessment & Start Chat")
 
     if submit_assessment:
-        with st.spinner("Analyzing parameters..."):
-            mentors_summary = "\n".join([f"- Name: {m['name']} | Title: {m['title']} | Profile: {m['profile_url']}" for m in mentors_pool])
+        with st.spinner("Analyzing parameters across all mentors..."):
+            mentors_summary = "\n".join([f"- Name: {m['name']} | Title: {m['title']} | Category: {m['category']} | Profile: {m['profile_url']}" for m in mentors_pool])
             prompt = f"""
-            You are an elite Business Development Expert and Executive Coach for 1:1 HUB.
-            Here is our complete roster of official mentors:
+            You are an elite Business Development Expert and Executive Coach for 1:1 HUB (onetoonehub.org).
+            Here is our complete roster of official mentors with their exact categories and profiles:
             {mentors_summary}
-            Client Inputs: Focus: {q1}, Stage: {q2}, Goal: {q3}
-            Task: Select the EXACT ONE mentor who fits best. Start your response strictly with "Recommended Expert: [Name]" followed by a high-value coaching strategy and mention their direct profile link.
+            
+            Client Assessment Inputs:
+            - Focus Domain: {q1}
+            - Stage: {q2}
+            - Goal/Challenge: {q3}
+            
+            Task: Analyze the client's goal and select the MOST RELEVANT mentor from the roster above (do not always pick the same person; choose based on expertise match). Start your response with "Recommended Expert: [Exact Name from the list]". Provide a strategic coaching response and include their exact direct profile URL.
             """
-            ai_reply = f"Recommended Expert: Abdelaziz Sami\n\nBased on your assessment inputs, Abdelaziz Sami is the ideal mentor to assist you with your technical and strategic goals. View profile: https://onetoonehub.org/user/abdelaziz-sami"
+            ai_reply = "Recommended Expert: Abdelaziz Sami\n\nBased on your assessment inputs, Abdelaziz Sami is an ideal match. View profile: https://onetoonehub.org/user/abdelaziz-sami"
             if model:
                 try:
                     res = model.generate_content(prompt)
@@ -123,22 +129,30 @@ with tab1:
     if user_chat_input:
         st.session_state.chat_history.append({"role": "user", "content": user_chat_input})
         
-        mentors_summary = "\n".join([f"- Name: {m['name']} | Title: {m['title']} | Profile: {m['profile_url']}" for m in mentors_pool])
+        mentors_summary = "\n".join([f"- Name: {m['name']} | Title: {m['title']} | Category: {m['category']} | Profile: {m['profile_url']}" for m in mentors_pool])
         chat_prompt = f"""
-        You are an elite Business Development AI Assistant for 1:1 HUB mentorship platform.
-        Mentors Roster:
+        You are an elite Business Development AI Assistant for 1:1 HUB mentorship platform (onetoonehub.org).
+        Complete Mentors Roster:
         {mentors_summary}
-        Current Selected Mentor: {st.session_state.selected_mentor}
+        
         User message: {user_chat_input}
-        Provide an expert response, recommending relevant mentors and their profile links when appropriate.
+        
+        Task: Answer the user's question intelligently. If they ask about a specific topic (like marketing, design, AI, sales, etc.), find the best matching mentor from the roster, state their name clearly, provide advice, and include their direct profile URL.
         """
-        reply = "I recommend connecting with our experts for this inquiry."
+        reply = "I recommend exploring our experts directory to find the best match for your specific query."
         if model:
             try:
                 res = model.generate_content(chat_prompt)
                 reply = res.text
             except:
                 pass
+                
+        # تحديث المنتور المختار لو ظهر اسم منتور تاني في الرد
+        for m in mentors_pool:
+            if m["name"].lower() in reply.lower():
+                st.session_state.selected_mentor = m["name"]
+                break
+                
         st.session_state.chat_history.append({"role": "assistant", "content": reply})
         st.rerun()
 
