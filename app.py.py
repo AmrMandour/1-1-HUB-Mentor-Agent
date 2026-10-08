@@ -29,13 +29,11 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Header
 st.markdown("<h2 style='color: #1E3A8A; margin-bottom: 0;'>1:1 HUB — AI Mentor Matcher Ecosystem</h2>", unsafe_allow_html=True)
 st.markdown("<p style='color: #4B5563; margin-top: 0;'>Official Web Platform & Intelligent Assessment Engine (onetoonehub.org)</p>", unsafe_allow_html=True)
 
 st.markdown("---")
 
-# Official Mentors Pool
 mentors_pool = [
     {"name": "Menna Ramadan", "title": "Alexandria, Iskala", "category": "General & Operations", "price": "400 EGP / Hour", "profile_url": "https://onetoonehub.org/user/menna-ramadan"},
     {"name": "Tasneem Hassan", "title": "Career Consultant", "category": "Career & HR", "price": "450 EGP / Hour", "profile_url": "https://onetoonehub.org/user/tasneem-hassan"},
@@ -70,8 +68,6 @@ tab1, tab2, tab3, tab4 = st.tabs(["AI Coaching Assessment & Chat", "Experts Dire
 
 with tab1:
     st.subheader("Strategic AI Coaching & Interactive English Assessment")
-    st.markdown("Complete the assessment below in English, and our intelligent agent will generate your expert match and open the interactive consultation chat:")
-
     with st.form("assessment_form"):
         q1 = st.selectbox("1. Select primary domain requiring expert intervention:", [
             "Tech & AI Architecture (Software & Artificial Intelligence)",
@@ -91,7 +87,7 @@ with tab1:
         submit_assessment = st.form_submit_button("Run AI Assessment & Start Chat")
 
     if submit_assessment:
-        with st.spinner("Analyzing parameters and initializing expert chat..."):
+        with st.spinner("Analyzing parameters..."):
             mentors_summary = "\n".join([f"- Name: {m['name']} | Title: {m['title']} | Profile: {m['profile_url']}" for m in mentors_pool])
             prompt = f"""
             You are an elite Business Development Expert and Executive Coach for 1:1 HUB.
@@ -114,12 +110,11 @@ with tab1:
                     break
 
             st.session_state.chat_history = [{"role": "assistant", "content": ai_reply}]
-            st.success("Assessment completed successfully! Interactive chat is now active below.")
+            st.success("Assessment completed successfully!")
 
     st.markdown("---")
     st.subheader("Interactive AI Consultation Chat")
     
-    # Display chat messages
     for message in st.session_state.chat_history:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
@@ -127,29 +122,25 @@ with tab1:
     user_chat_input = st.chat_input("Type your follow-up question in English...")
     if user_chat_input:
         st.session_state.chat_history.append({"role": "user", "content": user_chat_input})
-        with st.chat_message("user"):
-            st.markdown(user_chat_input)
-
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
-                mentors_summary = "\n".join([f"- Name: {m['name']} | Title: {m['title']} | Profile: {m['profile_url']}" for m in mentors_pool])
-                chat_prompt = f"""
-                You are an elite Business Development AI Assistant for 1:1 HUB mentorship platform.
-                Mentors Roster:
-                {mentors_summary}
-                Current Selected Mentor: {st.session_state.selected_mentor}
-                User message: {user_chat_input}
-                Provide an expert response, recommending relevant mentors and their profile links when appropriate.
-                """
-                reply = "I recommend connecting with our experts for this inquiry."
-                if model:
-                    try:
-                        res = model.generate_content(chat_prompt)
-                        reply = res.text
-                    except:
-                        pass
-                st.markdown(reply)
-                st.session_state.chat_history.append({"role": "assistant", "content": reply})
+        
+        mentors_summary = "\n".join([f"- Name: {m['name']} | Title: {m['title']} | Profile: {m['profile_url']}" for m in mentors_pool])
+        chat_prompt = f"""
+        You are an elite Business Development AI Assistant for 1:1 HUB mentorship platform.
+        Mentors Roster:
+        {mentors_summary}
+        Current Selected Mentor: {st.session_state.selected_mentor}
+        User message: {user_chat_input}
+        Provide an expert response, recommending relevant mentors and their profile links when appropriate.
+        """
+        reply = "I recommend connecting with our experts for this inquiry."
+        if model:
+            try:
+                res = model.generate_content(chat_prompt)
+                reply = res.text
+            except:
+                pass
+        st.session_state.chat_history.append({"role": "assistant", "content": reply})
+        st.rerun()
 
 with tab2:
     st.subheader("Certified Experts Directory & Direct Profiles")
