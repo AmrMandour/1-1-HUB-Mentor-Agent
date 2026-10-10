@@ -16,18 +16,26 @@ st.set_page_config(
     layout="wide"
 )
 
+# روابط الواتساب المحدثة
+WHATSAPP_COMMUNITY_URL = "https://chat.whatsapp.com/CcqBFzNpf8E8Q2NjyYtewr?s=cl&p=a&mlu=4&ilr=4&fbclid=IwY2xjawU2401leHRuA2FlbQIxMABwZG9mBWJyaWQRMXdoMDNEQUthRkJyU3c0bFFzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEe6_WIAYHCXTCNYeTxIR2HXXKMy4xbQMduD-fUaUs5ySNMasmIgDq76Eb4lWc_aem_z5djMMPrUC8xh1rjZ_6TAg"
+WHATSAPP_SUPPORT_URL = "https://api.whatsapp.com/send/?phone=201067420580&text&type=phone_number&app_absent=0"
+
 # Professional SaaS Styling
-st.markdown("""
+st.markdown(f"""
     <style>
-    .main {background-color: #F8FAFC;}
-    .stButton>button {background-color: #1E3A8A; color: white; border-radius: 8px; width: 100%; height: 45px; font-weight: bold; border: none;}
-    .stButton>button:hover {background-color: #3B82F6; color: white;}
-    .mentor-card {background: white; padding: 20px; border-radius: 12px; border: 1px solid #E2E8F0; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);}
-    .profile-link {display: inline-block; background-color: #1E3A8A; color: white !important; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 12px;}
-    .profile-link:hover {background-color: #3B82F6;}
-    footer {visibility: hidden;}
-    #MainMenu {visibility: hidden;}
-    header {visibility: hidden;}
+    .main {{background-color: #F8FAFC;}}
+    .stButton>button {{background-color: #1E3A8A; color: white; border-radius: 8px; width: 100%; height: 45px; font-weight: bold; border: none;}}
+    .stButton>button:hover {{background-color: #3B82F6; color: white;}}
+    .mentor-card {{background: white; padding: 20px; border-radius: 12px; border: 1px solid #E2E8F0; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);}}
+    .profile-link {{display: inline-block; background-color: #1E3A8A; color: white !important; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; margin-top: 12px;}}
+    .profile-link:hover {{background-color: #3B82F6;}}
+    .wa-btn {{display: inline-block; background-color: #25D366; color: white !important; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; margin-top: 10px; margin-bottom: 10px; margin-right: 10px;}}
+    .wa-btn:hover {{background-color: #128C7E;}}
+    .wa-support-btn {{display: inline-block; background-color: #075E54; color: white !important; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; margin-top: 10px; margin-bottom: 10px;}}
+    .wa-support-btn:hover {{background-color: #05413a;}}
+    footer {{visibility: hidden;}}
+    #MainMenu {{visibility: hidden;}}
+    header {{visibility: hidden;}}
     </style>
 """, unsafe_allow_html=True)
 
@@ -69,7 +77,7 @@ if "bookings" not in st.session_state:
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# Main Navigation Tabs (بدون أي إيموجيز)
+# Main Navigation Tabs
 tab1, tab2, tab3, tab4 = st.tabs(["AI Matcher & Consultation", "Experts Directory & Filter", "Instant Executive Booking", "Enterprise Dashboard"])
 
 with tab1:
@@ -132,6 +140,12 @@ with tab1:
 
             st.session_state.chat_history = [{"role": "assistant", "content": ai_reply}]
             st.success("AI Matching completed successfully!")
+            
+            # أزرار الواتساب بعد نتيجة التقييم
+            st.markdown(f'''
+                <a href="{WHATSAPP_COMMUNITY_URL}" target="_blank" class="wa-btn">🌐 Join 1:1 HUB WhatsApp Community &rarr;</a>
+                <a href="{WHATSAPP_SUPPORT_URL}" target="_blank" class="wa-support-btn">💬 Chat with Support &rarr;</a>
+            ''', unsafe_allow_html=True)
 
     st.markdown("---")
     st.subheader("Interactive AI Consultation Chat")
@@ -187,6 +201,10 @@ with tab2:
         filtered_mentors = [m for m in filtered_mentors if search_query.lower() in m["name"].lower() or search_query.lower() in m["title"].lower()]
 
     st.markdown(f"**Showing {len(filtered_mentors)} Certified Experts:**")
+    st.markdown(f'''
+        <a href="{WHATSAPP_COMMUNITY_URL}" target="_blank" class="wa-btn">🌐 Join WhatsApp Community &rarr;</a>
+        <a href="{WHATSAPP_SUPPORT_URL}" target="_blank" class="wa-support-btn">💬 Customer Support &rarr;</a>
+    ''', unsafe_allow_html=True)
     st.markdown("---")
 
     cols = st.columns(3)
@@ -227,6 +245,10 @@ with tab3:
                     "Status": "Confirmed Pipeline"
                 })
                 st.success(f"Booking successfully recorded and assigned to {selected_expert}!")
+                st.markdown(f'''
+                    <a href="{WHATSAPP_COMMUNITY_URL}" target="_blank" class="wa-btn">🌐 Join WhatsApp Community &rarr;</a>
+                    <a href="{WHATSAPP_SUPPORT_URL}" target="_blank" class="wa-support-btn">💬 Chat Support for Booking Confirmation &rarr;</a>
+                ''', unsafe_allow_html=True)
             else:
                 st.error("Please complete all required contact fields.")
 
